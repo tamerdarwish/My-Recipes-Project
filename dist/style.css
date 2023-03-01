@@ -1,0 +1,31 @@
+.recipe{
+    background-color:rgb(241, 119, 119);
+    display:flexbox;
+    width: 500px;
+    height:max-content;
+    margin: 5px;
+    border-radius: 25% 10%;
+    
+}
+
+.recipe a {
+   align-items: center;
+    
+}
+
+
+.recipe img{
+    width: 200px;
+    height: 200px;
+    display:flexbox;
+    border-radius: 10% 25%;
+}
+
+
+#recipes-container{
+    width: max-content;
+    height: max-content;
+    background-color: darkslategrey;
+    display:contents;
+   
+}

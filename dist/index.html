@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My Recipes</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+</head>
+
+<body>
+    <input type="text" placeholder="type a ingredient">
+    <button onclick=fetchRecipesData()>search</button>
+    <input type="checkbox" id="gluten-checkbox">
+    <label for="gluten-checkbox"> Without Gluten</label><br>
+    <input type="checkbox" id="milk-checkbox">
+    <label for="milk-checkbox"> Without Milk</label><br>
+
+    <div id="recipes-container"> </div>
+
+    <script id="recipes-template" type="text/x-handlebars-template">
+          {{#each recipe}}
+            <div class="recipe">
+                <a href="{{href}}">{{title}}</a>
+                <img src="{{thumbnail}}"/>
+                <ul> ingredients:
+                    {{#each ingredients}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+                
+            </div>
+          {{/each}}
+      </script>
+
+    <div class="menu">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.js"></script>
+    <script src="./jquery/dist/jquery.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -5,50 +5,49 @@ glutenIngredients = ["Flour", "Bread", "spaghetti", "Biscuits", "Beer"]
 const fetchRecipesData = function () {
     $('#recipes-container').empty()
     let input = $("input").val()
+    const glutenCheckbox = document.getElementById('gluten-checkbox').checked
+    const dairyCheckbox = document.getElementById('milk-checkbox').checked
+
     $.get(`recipes/${input}`, function (recipesData) {
 
-        if (document.getElementById('gluten-checkbox').checked && !document.getElementById('milk-checkbox').checked) {
-           
+        if (glutenCheckbox && !dairyCheckbox) {
             render(getGlutenFilteredArray(recipesData))
-            
         }
+        else if (dairyCheckbox && !glutenCheckbox) {
 
-        else if (document.getElementById('milk-checkbox').checked && !document.getElementById('gluten-checkbox').checked) {
-             
             render(getdairyFilteredArray(recipesData))
-            
         }
+        else if (dairyCheckbox && glutenCheckbox) {
 
-        else if(document.getElementById('milk-checkbox').checked && document.getElementById('gluten-checkbox').checked) {
             render(getBothFilteredArray(recipesData))
-            
         }
         else {
             render(recipesData)
         }
-
-        
-
-
-        //render(recipesData)
-
-
-
     })
 }
 
 const getGlutenFilteredArray = function (recipesData) {
     let filteredRecipedArray = []
+
     for (let recipe of recipesData) {
-        const found = checkForCommon(recipe.ingredients, glutenIngredients)
-        if (found && filteredRecipedArray.includes(recipe)) {
+        let alreadyInside = filteredRecipedArray.includes(recipe)
+        const containGluten = checkForCommon(recipe.ingredients, glutenIngredients)
+        
+        if (containGluten && alreadyInside) {
             filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
             break
-        }else if(found && !filteredRecipedArray.includes(recipe)){
+        }
+         else if (containGluten && !alreadyInside) {
+
             break
-        }else if(!found && !filteredRecipedArray.includes(recipe)){
+        } 
+        else if (!containGluten && !alreadyInside) {
+
             filteredRecipedArray.push(recipe)
-        } else if(!found && filteredRecipedArray.includes(recipe)){
+        } 
+        else if (!containGluten && alreadyInside) {
+
             filteredRecipedArray.pop()
             filteredRecipedArray.push(recipe)
         }
@@ -60,15 +59,24 @@ const getGlutenFilteredArray = function (recipesData) {
 const getdairyFilteredArray = function (recipesData) {
     let filteredRecipedArray = []
     for (let recipe of recipesData) {
-        const found = checkForCommon(recipe.ingredients, dairyIngredients)
-        if (found && filteredRecipedArray.includes(recipe)) {
+        let alreadyInside = filteredRecipedArray.includes(recipe)
+        const containDairy = checkForCommon(recipe.ingredients, dairyIngredients)
+
+        if (containDairy && alreadyInside) {
+
             filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
             break
-        }else if(found && !filteredRecipedArray.includes(recipe)){
+        }
+         else if (containDairy && !alreadyInside) {
+
             break
-        }else if(!found && !filteredRecipedArray.includes(recipe)){
+        } 
+        else if (!containDairy && !alreadyInside) {
+
             filteredRecipedArray.push(recipe)
-        } else if(!found && filteredRecipedArray.includes(recipe)){
+        } 
+        else if (!containDairy && alreadyInside) {
+
             filteredRecipedArray.pop()
             filteredRecipedArray.push(recipe)
         }
@@ -76,19 +84,28 @@ const getdairyFilteredArray = function (recipesData) {
     return filteredRecipedArray
 }
 
-const getBothFilteredArray = function(recipesData) {
-const Both = [... dairyIngredients, ...glutenIngredients]
-let filteredRecipedArray = []
+const getBothFilteredArray = function (recipesData) {
+    const Both = [...dairyIngredients, ...glutenIngredients]
+    let filteredRecipedArray = []
+
     for (let recipe of recipesData) {
-        const found = checkForCommon(recipe.ingredients, Both)
+
+        let alreadyInside = filteredRecipedArray.includes(recipe)
+        const containGlutenDiary = checkForCommon(recipe.ingredients, Both)
+
         if (found && filteredRecipedArray.includes(recipe)) {
+            
             filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
             break
-        }else if(found && !filteredRecipedArray.includes(recipe)){
+        }
+         else if (containGlutenDiary && !alreadyInside) {
             break
-        }else if(!found && !filteredRecipedArray.includes(recipe)){
+        } 
+        else if (!containGlutenDiary && !alreadyInside) {
             filteredRecipedArray.push(recipe)
-        } else if(!found && filteredRecipedArray.includes(recipe)){
+        } 
+        else if (!containGlutenDiary && alreadyInside) {
+
             filteredRecipedArray.pop()
             filteredRecipedArray.push(recipe)
         }
@@ -117,8 +134,6 @@ function checkForCommon(arr1, arr2) {
     return false;
 }
 
-
-
 const render = function (recipesData) {
     const source = $('#recipes-template').html();
     const template = Handlebars.compile(source);
@@ -126,10 +141,8 @@ const render = function (recipesData) {
     $('#recipes-container').append(newHTML);
 }
 
-
-
 $(document).on('click', 'img', function () {
-    //let firstIngredient = $(this).find("ul").text()
-    alert($(this).find("li").value)
+    let firstIngredient = $(this).closest(".recipe").find('ul li').first().text()
+    alert(firstIngredient)
 
 });

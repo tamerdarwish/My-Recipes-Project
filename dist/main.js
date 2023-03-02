@@ -5,48 +5,52 @@ glutenIngredients = ["Flour", "Bread", "spaghetti", "Biscuits", "Beer"]
 const fetchRecipesData = function () {
     $('#recipes-container').empty()
     let input = $("input").val()
-    const glutenCheckbox = document.getElementById('gluten-checkbox').checked
-    const dairyCheckbox = document.getElementById('milk-checkbox').checked
+
 
     $.get(`recipes/${input}`, function (recipesData) {
-
-        if (glutenCheckbox && !dairyCheckbox) {
-            render(getGlutenFilteredArray(recipesData))
-        }
-        else if (dairyCheckbox && !glutenCheckbox) {
-
-            render(getdairyFilteredArray(recipesData))
-        }
-        else if (dairyCheckbox && glutenCheckbox) {
-
-            render(getBothFilteredArray(recipesData))
-        }
-        else {
-            render(recipesData)
-        }
+        renderByFiltering(recipesData)
     })
 }
 
-const getGlutenFilteredArray = function (recipesData) {
-    let filteredRecipedArray = []
+const renderByFiltering = function (recipesData) {
+    const glutenCheckbox = document.getElementById('gluten-checkbox').checked
+    const dairyCheckbox = document.getElementById('milk-checkbox').checked
 
+    if (glutenCheckbox && !dairyCheckbox) {
+        render(getGlutenFilteredArray(recipesData))
+    }
+    else if (dairyCheckbox && !glutenCheckbox) {
+
+        render(getdairyFilteredArray(recipesData))
+    }
+    else if (dairyCheckbox && glutenCheckbox) {
+
+        render(getDairyGlutenFilteredArray(recipesData))
+    }
+    else {
+        render(recipesData)
+    }
+}
+
+const getFilterRecipes = function (recipesData, ingredientsArray) {
+    let filteredRecipedArray = []
     for (let recipe of recipesData) {
         let alreadyInside = filteredRecipedArray.includes(recipe)
-        const containGluten = checkForCommon(recipe.ingredients, glutenIngredients)
-        
-        if (containGluten && alreadyInside) {
+        const containStatus = checkCommonsItems(recipe.ingredients, ingredientsArray)
+
+        if (containStatus && alreadyInside) {
             filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
             break
         }
-         else if (containGluten && !alreadyInside) {
+        else if (containStatus && !alreadyInside) {
 
             break
-        } 
-        else if (!containGluten && !alreadyInside) {
+        }
+        else if (!containStatus && !alreadyInside) {
 
             filteredRecipedArray.push(recipe)
-        } 
-        else if (!containGluten && alreadyInside) {
+        }
+        else if (!containStatus && alreadyInside) {
 
             filteredRecipedArray.pop()
             filteredRecipedArray.push(recipe)
@@ -54,83 +58,35 @@ const getGlutenFilteredArray = function (recipesData) {
     }
 
     return filteredRecipedArray
+}
+
+const getGlutenFilteredArray = function (recipesData) {
+
+    return getFilterRecipes(recipesData, glutenIngredients)
 }
 
 const getdairyFilteredArray = function (recipesData) {
-    let filteredRecipedArray = []
-    for (let recipe of recipesData) {
-        let alreadyInside = filteredRecipedArray.includes(recipe)
-        const containDairy = checkForCommon(recipe.ingredients, dairyIngredients)
-
-        if (containDairy && alreadyInside) {
-
-            filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
-            break
-        }
-         else if (containDairy && !alreadyInside) {
-
-            break
-        } 
-        else if (!containDairy && !alreadyInside) {
-
-            filteredRecipedArray.push(recipe)
-        } 
-        else if (!containDairy && alreadyInside) {
-
-            filteredRecipedArray.pop()
-            filteredRecipedArray.push(recipe)
-        }
-    }
-    return filteredRecipedArray
+    return getFilterRecipes(recipesData, dairyIngredients)
 }
 
-const getBothFilteredArray = function (recipesData) {
-    const Both = [...dairyIngredients, ...glutenIngredients]
-    let filteredRecipedArray = []
+const getDairyGlutenFilteredArray = function (recipesData) {
 
-    for (let recipe of recipesData) {
-
-        let alreadyInside = filteredRecipedArray.includes(recipe)
-        const containGlutenDiary = checkForCommon(recipe.ingredients, Both)
-
-        if (found && filteredRecipedArray.includes(recipe)) {
-            
-            filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
-            break
-        }
-         else if (containGlutenDiary && !alreadyInside) {
-            break
-        } 
-        else if (!containGlutenDiary && !alreadyInside) {
-            filteredRecipedArray.push(recipe)
-        } 
-        else if (!containGlutenDiary && alreadyInside) {
-
-            filteredRecipedArray.pop()
-            filteredRecipedArray.push(recipe)
-        }
-    }
-    return filteredRecipedArray
+    const dairyGlutenIngredients = dairyIngredients.concat(glutenIngredients);
+    return getFilterRecipes(recipesData, dairyGlutenIngredients)
 
 }
 
-function checkForCommon(arr1, arr2) {
+function checkCommonsItems(arr1, arr2) {
 
-    //outer loop travere the first array colors1
     for (let i = 0; i < arr1.length; i++) {
 
-        //inner loop travere the second array colors2
         for (let j = 0; j < arr2.length; j++) {
 
-            //check if present element of colors1 is equal to present element of colors2
             if (arr1[i] == arr2[j]) {
                 return true;
             }
         }
-
     }
-
-    //returns false if no common elements found
     return false;
 }
 

@@ -10,11 +10,11 @@
 
 <body>
     <input type="text" placeholder="type a ingredient">
-    <button onclick=fetchRecipesData()>search</button>
+    <button >search</button>
     <input type="checkbox" id="gluten-checkbox">
     <label for="gluten-checkbox"> Without Gluten</label><br>
     <input type="checkbox" id="milk-checkbox">
-    <label for="milk-checkbox"> Without Milk</label><br>
+    <label for="milk-checkbox"> Without Diary</label><br>
 
     <div id="recipes-container"> </div>
 
@@ -33,12 +33,15 @@
           {{/each}}
       </script>
 
-    <div class="menu">
-    </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.js"></script>
     <script src="./jquery/dist/jquery.js"></script>
+    
+    <script src="Render.js"></script>
+    <script src="Module.js"></script>
     <script src="main.js"></script>
+    
 </body>
 
 </html>

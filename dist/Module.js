@@ -1,75 +1,47 @@
 class Module {
 
-    constructor(){
+    constructor(input) {
         this.recipesData = []
-        this.filteredRecipesData = []
-        this.dairyIngredients = ["Cream", "Cheese", "Milk", "Butter", "Creme", "Ricotta", "Mozzarella", "Custard", "Cream Cheese"]
-        this.glutenIngredients = ["Flour", "Bread", "spaghetti", "Biscuits", "Beer"]
-        this.dairyGlutenIngredients = this.dairyIngredients.concat(this.glutenIngredients);
+        this.RecipesWithoutGluten = []
+        this.RecipesWithoutDiary = []
+        this.RecipesWithoutBoth = []
+        this.input = input
     }
 
-     getDataFromServer(input){
-       // let dataRecipes = []
-       let self = this
-        $.get(`recipes/${input}`, function (recipes) {
-           self.recipesData = recipes
+
+
+    getRecipes() {
+        const self = this
+
+        $.get(`recipes/${self.input}`, function (recipes) {
+            self.recipesData = recipes
         })
-  
     }
 
-    checkCommonsItems (arr1, arr2) {
+    getRecipesWithoutGluten() {
+        const self = this
 
-        for (let i = 0; i < arr1.length; i++) {
-            for (let j = 0; j < arr2.length; j++) {
-
-                if (arr1[i] == arr2[j]) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        $.get(`recipes/${self.input}?withoutGluten=true&withoutDiary=false`, function (withoutGlutenRecipes) {
+            self.RecipesWithoutGluten = withoutGlutenRecipes
+        })
     }
 
-    getFilterRecipes( ingredientsArray) {
-        let filteredRecipedArray = []
+    getRecipesWithoutDiary() {
+        const self = this
 
-        for (let recipe of this.recipesData) {
-            let alreadyInside = filteredRecipedArray.includes(recipe)
-            const containStatus = this.checkCommonsItems(recipe.ingredients, ingredientsArray)
+        $.get(`recipes/${self.input}?withoutGluten=false&withoutDiary=true`, function (withoutDiaryRecipes) {
+            self.RecipesWithoutDiary = withoutDiaryRecipes
 
-            if (containStatus && alreadyInside) {
-
-                filteredRecipedArray.splice(filteredRecipedArray.indexOf(recipe), 1)
-                break
-            }
-            else if (containStatus && !alreadyInside) {
-
-                break
-            }
-            else if (!containStatus && !alreadyInside) {
-
-                filteredRecipedArray.push(recipe)
-            }
-            else if (!containStatus && alreadyInside) {
-
-                filteredRecipedArray.pop()
-                filteredRecipedArray.push(recipe)
-            }
-        }
-        this.filteredRecipesData = filteredRecipedArray
+        })
     }
 
-    getGlutenFilteredArray() {
+    getRecipesWithoutBoth() {
+        const self = this
 
-         this.getFilterRecipes(this.glutenIngredients)
+        $.get(`recipes/${self.input}?withoutGluten=true&withoutDiary=true`, function (withBothRecipes) {
+            self.RecipesWithoutBoth = withBothRecipes
+
+        })
     }
 
-    getdairyFilteredArray() {
-         this.getFilterRecipes(this.dairyIngredients)
-    }
-
-    getDairyGlutenFilteredArray() {
-
-         this.getFilterRecipes(this.dairyGlutenIngredients)
-    }
 }

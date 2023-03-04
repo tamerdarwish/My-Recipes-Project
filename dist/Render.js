@@ -1,8 +1,5 @@
 class Render{
- /*constructor(recipesData){
-    
- }*/
-
+   
  renderData(recipesData){
     $('#recipes-container').empty()
     const source = $('#recipes-template').html();

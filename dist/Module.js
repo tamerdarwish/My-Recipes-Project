@@ -28,6 +28,17 @@ class Module {
         
     }
 
+    loadFirstEight(recipesArray){
+        this.currentlyEightValues = []
+        for(let i = 0 ; i<recipesArray.length ; i++){
+            if(i < 8){
+                this.currentlyEightValues.push(recipesArray[i])
+            }
+
+        }
+        this.lastRecipeIndex = 8
+    }
+
     loadBackEight(recipesArray){
 
         this.lastRecipeIndex = this.lastRecipeIndex - 8 

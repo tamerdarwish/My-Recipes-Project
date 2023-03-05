@@ -2,9 +2,6 @@
 const render = new Render()
 const module = new Module()
 
-
-
-
 $("#search-button").on("click", function () {
     let input = $("input").val()
     module.input = input
@@ -26,22 +23,24 @@ const filteringByCheckbox = function () {
     const dairyCheckbox = document.getElementById('milk-checkbox').checked
 
     if (glutenCheckbox && !dairyCheckbox) {
-        module.loadNextEight(module.RecipesWithoutGluten)
+        module.loadFirstEight(module.RecipesWithoutGluten)
         render.renderData(module.currentlyEightValues)
     }
 
     else if (dairyCheckbox && !glutenCheckbox) {
 
-        render.renderData(module.RecipesWithoutDiary)
+        module.loadFirstEight(module.RecipesWithoutDiary)
+        render.renderData(module.currentlyEightValues)
     }
 
     else if (dairyCheckbox && glutenCheckbox) {
 
-        render.renderData(module.RecipesWithoutBoth)
+        module.loadFirstEight(module.RecipesWithoutBoth)
+        render.renderData(module.currentlyEightValues)
     }
 
     else {
-        module.loadNextEight(module.recipesData)
+        module.loadFirstEight(module.recipesData)
         render.renderData(module.currentlyEightValues)
     }
 
@@ -69,9 +68,6 @@ const filteringByCheckbox = function () {
             render.renderData(module.currentlyEightValues)
         }
 
-
-
-       
     }
 
     renderBack8 = function () {

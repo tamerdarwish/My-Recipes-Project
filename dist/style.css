@@ -39,5 +39,16 @@
    flex-direction: row;
     background-color: rgba(106, 106, 106, 0.626);
     
-    
+}
+
+#next-button{
+    width: max-content;
+    height: max-content;
+    font-size: 20px;
+}
+
+#back-button{
+    width: max-content;
+    height: max-content;
+    font-size: 20px;
 }

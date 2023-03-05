@@ -3,14 +3,16 @@ const render = new Render()
 const module = new Module()
 
 
-$("button").on("click", function () {
+
+
+$("#search-button").on("click", function () {
     let input = $("input").val()
     module.input = input
     loadingArraysFiltering()
     filteringByCheckbox()
 })
 
-const loadingArraysFiltering = function(){
+const loadingArraysFiltering = function () {
 
     module.getRecipes()
     module.getRecipesWithoutGluten()
@@ -18,27 +20,63 @@ const loadingArraysFiltering = function(){
     module.getRecipesWithoutBoth()
 }
 
-const filteringByCheckbox = function(){
+
+const filteringByCheckbox = function () {
     const glutenCheckbox = document.getElementById('gluten-checkbox').checked
     const dairyCheckbox = document.getElementById('milk-checkbox').checked
 
     if (glutenCheckbox && !dairyCheckbox) {
-        render.renderData(module.RecipesWithoutGluten)
+        module.loadNextEight(module.RecipesWithoutGluten)
+        render.renderData(module.currentlyEightValues)
     }
 
     else if (dairyCheckbox && !glutenCheckbox) {
-       
+
         render.renderData(module.RecipesWithoutDiary)
     }
 
     else if (dairyCheckbox && glutenCheckbox) {
-  
+
         render.renderData(module.RecipesWithoutBoth)
     }
 
     else {
+        module.loadNextEight(module.recipesData)
+        render.renderData(module.currentlyEightValues)
+    }
+
+    renderNext8 = function () {
+        const glutenCheckbox = document.getElementById('gluten-checkbox').checked
+        const dairyCheckbox = document.getElementById('milk-checkbox').checked
+
+        if (glutenCheckbox && !dairyCheckbox) {
+            module.loadNextEight(module.RecipesWithoutGluten)
+            render.renderData(module.currentlyEightValues)
+        }
     
-        render.renderData(module.recipesData) 
+        else if (dairyCheckbox && !glutenCheckbox) {
+            module.loadNextEight(module.RecipesWithoutDiary)
+            render.renderData(module.currentlyEightValues)
+        }
+    
+        else if (dairyCheckbox && glutenCheckbox) {
+            module.loadNextEight(module.RecipesWithoutBoth)
+            render.renderData(module.currentlyEightValues)
+        }
+    
+        else {
+            module.loadNextEight(module.recipesData)
+            render.renderData(module.currentlyEightValues)
+        }
+
+
+
+       
+    }
+
+    renderBack8 = function () {
+        module.loadBackEight(module.recipesData)
+        render.renderData(module.currentlyEightValues)
     }
 
 }
@@ -48,4 +86,8 @@ $(document).on('click', 'img', function () {
     alert(firstIngredient)
 
 });
+
+
+
+
 

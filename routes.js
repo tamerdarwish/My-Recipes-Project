@@ -52,7 +52,13 @@ router.get('/recipes/:value', function (request, response) {
                 }
                 if(!checkCommonsItems(toLowerCaseArray(recipe.ingredients), toLowerCaseArray(dairyGlutenIngredients))){
                     recipesWithoutBoth.push(recipe)
-                }
+                } 
+
+
+
+
+
+                
             }
 
             if(withoutGlutenStatus == 'true' && withoutDiaryStatus == 'false'){

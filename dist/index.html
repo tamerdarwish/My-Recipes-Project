@@ -10,7 +10,7 @@
 
 <body>
     <input type="text" placeholder="type a ingredient">
-    <button >search</button>
+    <button id="search-button" >search</button>
     <input type="checkbox" id="gluten-checkbox">
     <label for="gluten-checkbox"> Without Gluten</label><br>
     <input type="checkbox" id="milk-checkbox">
@@ -32,6 +32,10 @@
             </div>
           {{/each}}
       </script>
+
+      <button id="back-button" onclick="renderBack8()"> <-- </button>
+      <button id="next-button" onclick="renderNext8()"> --> </button>
+      
 
 
 
